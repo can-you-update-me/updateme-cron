@@ -26,4 +26,5 @@ def execute():
 
 scheduler.add_job(execute, 'interval', minutes=1)
 
+print('Starting cron...')
 scheduler.start()
