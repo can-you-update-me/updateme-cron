@@ -20,11 +20,29 @@ scheduler = BlockingScheduler({
     'apscheduler.timezone': 'UTC'
 })
 
+
 def execute():
-    # requests.post(...)
-    print(datetime.now())
+    log('Cron job kicking off')
+    response = requests.post('http://web:3000/time_to_update')
+    if response.ok:
+        log(
+            'Cron job kicked off successfully: {} {}',
+            response.status_code,
+            response.reason
+        )
+    else:
+        log(
+            'Cron job failed to kick off: {} {}',
+            response.status_code,
+            response.reason
+        )
+
+
+def log(line, *args):
+    print(datetime.now().isoformat(), line.format(*args))
+
 
 scheduler.add_job(execute, 'interval', minutes=1)
 
-print('Starting cron...')
+log('Starting cron...')
 scheduler.start()
